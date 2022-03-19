@@ -1,8 +1,12 @@
 const express = require("express");
- const app = express();  //함수처럼 express 실행 
- const port = 3000;
+const connect = require("./schemas");
+const app = express();  //함수처럼 express 실행 
+const port = 3000;
 
- const goodsRouter = require("./routes/goods")
+connect();
+
+const goodsRouter = require("./routes/goods")
+const cartsRouter = require("./routes/carts")
 
 // 이미 존재하는 미들웨어들은 expressjs 홈페이지에서 제공되고 있다
 // npmjs 여기 홈페이지는 패키지들이 많음 express Middleware검색 ㄱ
@@ -13,10 +17,10 @@ const requestMiddleware = ((req, res, next) => {
     next(); 
     // next있어야만 다음 미들웨어로 넘어간다. 여기서 next가 없으면 무한로딩이 걸린다.
 }) 
-
+app.use(express.json())
 app.use(requestMiddleware);
 
-app.use("/api", [goodsRouter])
+app.use("/api", [goodsRouter, cartsRouter]) // api뒤의 순서대로 경로 탐색후 연결
 
 // Router : 서버?
 app.get('/', (req, res)=>{  // /슬래시 뒤에 아무것도 안붙었을 때, req : request, res : respones
@@ -29,5 +33,4 @@ app.get('/', (req, res)=>{  // /슬래시 뒤에 아무것도 안붙었을 때, 
 
  //미들웨어 == 모듈   Request(요청) -> Middleware(서버에 추가적인 기능을 붙인다) -> Response(응답)
  //Ex) 미들웨어에 한국어를 이해할 수 있는 추가기능을 붙이면 한국말을 이해하고 말 할 수 있다
-
 
