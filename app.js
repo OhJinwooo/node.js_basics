@@ -1,4 +1,5 @@
-const express = require("express");
+
+const express = require("express");// express패키지를 불러옴
 const connect = require("./schemas");
 const app = express();  //함수처럼 express 실행 
 const port = 3000;
@@ -17,7 +18,10 @@ const requestMiddleware = ((req, res, next) => {
     next(); 
     // next있어야만 다음 미들웨어로 넘어간다. 여기서 next가 없으면 무한로딩이 걸린다.
 }) 
-app.use(express.json())
+
+app.use(express.static("static"))
+app.use(express.json());
+app.use(express.urlencoded())
 app.use(requestMiddleware);
 
 app.use("/api", [goodsRouter, cartsRouter]) // api뒤의 순서대로 경로 탐색후 연결
